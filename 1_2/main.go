@@ -16,8 +16,7 @@ func main() {
 	input := string(dat)
 
 	splitStr := strings.Split(input, "\n")
-	numList := []int64{}
-	numbersMap := map[int64]map[int64]struct{}{}
+	numbersMap := map[int64]map[int64]bool{}
 
 	for _, line := range splitStr {
 		num, err := strconv.ParseInt(strings.TrimSpace(line), 10, 64)
@@ -25,12 +24,11 @@ func main() {
 			panic(err)
 		}
 
-		numList = append(numList, num)
-		numbersMap[num] = map[int64]struct{}{}
+		numbersMap[num] = map[int64]bool{}
 	}
 
-	for _, num1 := range numList {
-		for _, num2 := range numList {
+	for num1, _ := range numbersMap {
+		for num2, _ := range numbersMap {
 			if _, ok := numbersMap[2020-(num1+num2)]; ok {
 				fmt.Println("FOUND: ", 2020-(num1+num2), num1, num2)
 				fmt.Println((2020 - (num1 + num2)) * num1 * num2)
