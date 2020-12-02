@@ -27,8 +27,8 @@ func main() {
 		numbersMap[num] = map[int64]bool{}
 	}
 
-	for num1, _ := range numbersMap {
-		for num2, _ := range numbersMap {
+	for num1 := range numbersMap {
+		for num2 := range numbersMap {
 			if _, ok := numbersMap[2020-(num1+num2)]; ok {
 				fmt.Println("FOUND: ", 2020-(num1+num2), num1, num2)
 				fmt.Println((2020 - (num1 + num2)) * num1 * num2)
