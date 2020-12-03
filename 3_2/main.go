@@ -22,12 +22,12 @@ func main() {
 	numSlopes := len(xSlope)
 	width := strings.Index(strData, "\n")
 
-	// start from the second line so y = 1
 	splitString := strings.Split(strData, "\n")
 	if len(splitString) <= 1 {
 		return
 	}
 
+	// start from the second line so y = 1
 	for y := 1; y < len(splitString); y++ {
 		line := splitString[y]
 		for i := 0; i < numSlopes; i++ {
