@@ -13,18 +13,23 @@ func main() {
 	}
 	strData := string(data)
 
-	xPosition := []int{0, 0, 0, 0, 0}
 	xSlope := []int{1, 1, 3, 5, 7}
 	ySlope := []int{1, 2, 1, 1, 1}
-	treeCounts := []int{0, 0, 0, 0, 0}
+
+	treeCounts := make([]int, len(xSlope))
+	xPosition := make([]int, len(xSlope))
 
 	numSlopes := len(xSlope)
 	width := strings.Index(strData, "\n")
 
 	// start from the second line so y = 1
-	y := 1
 	splitString := strings.Split(strData, "\n")
-	for _, line := range splitString[1:] {
+	if len(splitString) <= 1 {
+		return
+	}
+
+	for y := 1; y < len(splitString); y++ {
+		line := splitString[y]
 		for i := 0; i < numSlopes; i++ {
 			if y%ySlope[i] != 0 {
 				continue
@@ -32,10 +37,9 @@ func main() {
 
 			xPosition[i] = (xPosition[i] + xSlope[i]) % width
 			if line[xPosition[i]] == '#' {
-				treeCounts[i] = treeCounts[i] + 1
+				treeCounts[i]++
 			}
 		}
-		y++
 	}
 
 	result := 1
