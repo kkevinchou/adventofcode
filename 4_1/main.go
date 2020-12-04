@@ -53,3 +53,12 @@ func eval(data map[string]string) bool {
 
 	return true
 }
+
+func parseLine(passport map[string]string, line string) {
+	fields := strings.Split(line, " ")
+	for _, field := range fields {
+		key := strings.Split(field, ":")[0]
+		val := strings.Split(field, ":")[1]
+		passport[key] = val
+	}
+}
