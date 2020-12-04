@@ -54,15 +54,14 @@ func eval(data map[string]string) bool {
 
 	result := true
 
-	result = result && len(data["byr"]) == 4 && mustParse(data["byr"]) >= 1920 && mustParse(data["byr"]) <= 2002
-	result = result && len(data["iyr"]) == 4 && mustParse(data["iyr"]) >= 2010 && mustParse(data["iyr"]) <= 2020
-	result = result && len(data["eyr"]) == 4 && mustParse(data["eyr"]) >= 2020 && mustParse(data["eyr"]) <= 2030
+	result = result && len(data["byr"]) == 4 && mustParseNum(data["byr"]) >= 1920 && mustParseNum(data["byr"]) <= 2002
+	result = result && len(data["iyr"]) == 4 && mustParseNum(data["iyr"]) >= 2010 && mustParseNum(data["iyr"]) <= 2020
+	result = result && len(data["eyr"]) == 4 && mustParseNum(data["eyr"]) >= 2020 && mustParseNum(data["eyr"]) <= 2030
 
 	result = result && parseHeight(data["hgt"])
 	result = result && parseHair(data["hcl"])
 	result = result && (data["ecl"] == "amb" || data["ecl"] == "blu" || data["ecl"] == "brn" || data["ecl"] == "gry" || data["ecl"] == "grn" || data["ecl"] == "hzl" || data["ecl"] == "oth")
-	_, good := isNum(strings.TrimLeft(data["pid"], "0"))
-	result = result && (len(data["pid"]) == 9 && good)
+	result = result && (len(data["pid"]) == 9 && isNum(data["pid"]))
 
 	return result
 }
@@ -76,15 +75,15 @@ func parseLine(passport map[string]string, line string) {
 	}
 }
 
-func mustParse(input string) int64 {
-	out, err := strconv.ParseInt(input, 10, 64)
+func mustParseNum(input string) int64 {
+	out, err := parseNum(input)
 	if err != nil {
 		panic(err)
 	}
 	return out
 }
 
-func isNum(input string) (int64, bool) {
+func parseNum(input string) (int64, bool) {
 	out, err := strconv.ParseInt(input, 10, 64)
 	if err != nil {
 		return -1, false
@@ -92,10 +91,18 @@ func isNum(input string) (int64, bool) {
 	return out, true
 }
 
+func isNum(input string) bool {
+	_, err := strconv.ParseInt(input, 10, 64)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func parseHeight(input string) bool {
 	index := strings.Index(input, "cm")
 	if index != -1 {
-		if num, good := isNum(input[:index]); good {
+		if num, ok := parseNum(input[:index]); ok {
 			return num >= 150 && num <= 193
 		}
 		return false
@@ -103,7 +110,7 @@ func parseHeight(input string) bool {
 
 	index = strings.Index(input, "in")
 	if index != -1 {
-		if num, good := isNum(input[:index]); good {
+		if num, ok := parseNum(input[:index]); ok {
 			return num >= 59 && num <= 76
 		}
 		return false
