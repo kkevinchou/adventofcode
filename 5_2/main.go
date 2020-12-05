@@ -13,16 +13,24 @@ func main() {
 	}
 	strData := string(data)
 
-	maxSeat := 0
+	filledSeats := map[int]bool{}
 
 	for _, line := range strings.Split(strData, "\n") {
 		seat := calcSeat(line)
-		if seat > maxSeat {
-			maxSeat = seat
-		}
+		filledSeats[seat] = true
 	}
 
-	fmt.Println(maxSeat)
+	for i := 0; i <= 127*8+7; i++ {
+		if _, ok := filledSeats[i]; !ok {
+			if i > 0 && i < 127*8+7 {
+				_, preSeatFilled := filledSeats[i-1]
+				_, postSeatFilled := filledSeats[i+1]
+				if preSeatFilled && postSeatFilled {
+					fmt.Println(i)
+				}
+			}
+		}
+	}
 }
 
 func calcSeat(line string) int {
@@ -33,7 +41,6 @@ func calcSeat(line string) int {
 
 func find(min, max int, query string) int {
 	first := query[0]
-	fmt.Println(min, max, string(first), query)
 	if max-min == 1 {
 		if first == 'F' || first == 'L' {
 			return min
