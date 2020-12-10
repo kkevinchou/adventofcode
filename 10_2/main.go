@@ -23,25 +23,21 @@ func main() {
 
 	nums = append(nums, max+3, 0)
 	sort.Ints(nums)
-	fmt.Println(calc(nums))
-}
 
-func calc(nums []int) int {
-	countAtPosition := map[int]int{
-		len(nums) - 1: 1,
-		len(nums) - 2: 1,
-		len(nums) - 3: 1,
-	}
+	// set up base case
+	countAtPosition := make([]int, len(nums))
+	countAtPosition[len(nums)-1] = 1
+	countAtPosition[len(nums)-2] = 1
+	countAtPosition[len(nums)-3] = 1
 
 	for i := len(nums) - 4; i >= 0; i-- {
-		countAtPosition[i] = subCalc(nums, countAtPosition, i)
+		countAtPosition[i] = computeCount(nums, countAtPosition, i)
 	}
 
-	fmt.Println(countAtPosition)
-	return countAtPosition[0]
+	fmt.Println(countAtPosition[0])
 }
 
-func subCalc(nums []int, countAtPosition map[int]int, position int) int {
+func computeCount(nums []int, countAtPosition []int, position int) int {
 	total := 0
 	for i := 0; i < 3; i++ {
 		if nums[position] >= (nums[position+1+i] - 3) {
