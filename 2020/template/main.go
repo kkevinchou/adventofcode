@@ -7,5 +7,6 @@ func main() {
 		if done {
 			break
 		}
+		_ = record
 	}
 }

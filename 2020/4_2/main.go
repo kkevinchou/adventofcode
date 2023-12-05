@@ -76,9 +76,9 @@ func parseLine(passport map[string]string, line string) {
 }
 
 func mustParseNum(input string) int64 {
-	out, err := parseNum(input)
-	if err != nil {
-		panic(err)
+	out, ok := parseNum(input)
+	if !ok {
+		panic("failed to parse num")
 	}
 	return out
 }

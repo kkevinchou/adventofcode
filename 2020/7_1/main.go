@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
@@ -71,11 +72,27 @@ func parseRulesList(rulesList string) []BagRule {
 		if ruleSplit[0] == "no" {
 			continue
 		}
-		result = append(result, BagRule{ruleSplit[1], mustParseNum(ruleSplit[0])})
+		result = append(result, BagRule{ruleSplit[1], int(mustParseNum(ruleSplit[0]))})
 	}
 	return result
 }
 
 func stripBag(str string) string {
 	return str[:strings.Index(str, " bag")]
+}
+
+func mustParseNum(input string) int64 {
+	out, ok := parseNum(input)
+	if !ok {
+		panic("failed to parse num")
+	}
+	return out
+}
+
+func parseNum(input string) (int64, bool) {
+	out, err := strconv.ParseInt(input, 10, 64)
+	if err != nil {
+		return -1, false
+	}
+	return out, true
 }
