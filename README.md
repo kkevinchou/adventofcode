@@ -1,5 +1,3 @@
-# Advent Of Code 2020
+# Advent Of Code
 
 https://adventofcode.com/
-
-Code that's cleaner than both Yufei's and Gio's
