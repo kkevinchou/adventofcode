@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"kkevinchou/adventofcode/utils"
+
+	"github.com/kkevinchou/adventofcode/utils"
 )
 
 func main() {

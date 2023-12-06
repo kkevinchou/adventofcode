@@ -1,3 +1,3 @@
-module kkevinchou/adventofcode
+module github.com/kkevinchou/adventofcode
 
 go 1.19

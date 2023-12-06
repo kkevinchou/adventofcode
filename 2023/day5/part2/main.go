@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"kkevinchou/adventofcode/utils"
 	"sort"
 	"strings"
+
+	"github.com/kkevinchou/adventofcode/utils"
 )
 
 func main() {
