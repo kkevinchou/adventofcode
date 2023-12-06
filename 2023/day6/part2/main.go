@@ -28,19 +28,28 @@ func main() {
 		}
 	}
 
-	start := 0
 	goal := utils.MustParseNum(strings.Join(distances, ""))
 	maxDuration := utils.MustParseNum(strings.Join(durations, ""))
 
+	var winCount int
 	for j := 1; j < maxDuration; j++ {
 		distance := simulate(j, maxDuration)
 		if distance > goal {
-			start = j
-			break
+			winCount += 1
 		}
 	}
-	end := bs(start, maxDuration, maxDuration, goal)
-	fmt.Println(end - start + 1)
+	fmt.Println(winCount)
+
+	// start := 0
+	// for j := 1; j < maxDuration; j++ {
+	// 	distance := simulate(j, maxDuration)
+	// 	if distance > goal {
+	// 		start = j
+	// 		break
+	// 	}
+	// }
+	// end := bs(start, maxDuration, maxDuration, goal)
+	// fmt.Println(end - start + 1)
 }
 
 func bs(start, end int, maxDuration int, goal int) int {

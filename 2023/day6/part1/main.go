@@ -28,19 +28,16 @@ func main() {
 		}
 	}
 
-	fmt.Println(durations, distances)
-
 	result := 1
 
 	for i, duration := range durations {
 		winCount := 0
-		for j := 1; j < distances[i]; j++ {
+		for j := 1; j < duration; j++ {
 			distance := simulate(j, duration)
 			if distance > distances[i] {
 				winCount += 1
 			}
 		}
-		fmt.Println(winCount)
 		result *= winCount
 	}
 
