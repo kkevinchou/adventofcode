@@ -61,3 +61,23 @@ func IsNum(input string) bool {
 	_, err := ParseNum(input)
 	return err == nil
 }
+
+func MapFromSlice[T comparable](elements []T) map[T]T {
+	result := map[T]T{}
+	for _, element := range elements {
+		result[element] = element
+	}
+	return result
+}
+
+func StringSliceToIntSlice(elements []string) []int {
+	var result []int
+	for _, element := range elements {
+		if len(strings.TrimSpace(element)) == 0 {
+			continue
+		}
+
+		result = append(result, MustParseNum(element))
+	}
+	return result
+}
