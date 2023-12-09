@@ -75,16 +75,8 @@ func main() {
 		}
 	}
 
-	// fmt.Println(ranges)
-	// for _, mapping := range mappings {
-	// 	fmt.Println(mapping)
-	// }
-
-	// fmt.Println("--------------")
-
 	for i := 0; i < len(mappings); i++ {
 		ranges = lookup(mappings[i], ranges)
-		// fmt.Println(ranges)
 	}
 
 	sort.Slice(ranges, func(i, j int) bool {
