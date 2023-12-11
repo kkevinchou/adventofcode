@@ -7,6 +7,7 @@ import (
 	"image/png"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 type Pixel struct {
@@ -76,8 +77,12 @@ func (v *Visualizer) CreateGIF(fps int) {
 	videoFile := fmt.Sprintf("%s.avi", v.prefix)
 	gifFile := fmt.Sprintf("%s.gif", v.prefix)
 
-	// cmd := exec.Command("./ffmpeg.exe", "-framerate", fmt.Sprintf("%d", fps), "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), "-c:v", "libx264", videoFile, "-y")
-	cmd := exec.Command("./ffmpeg.exe", "-framerate", fmt.Sprintf("%d", fps), "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), videoFile, "-y")
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	cmd := exec.Command(filepath.Join(cwd, "..", "..", "..", "visualizer", "ffmpeg.exe"), "-framerate", fmt.Sprintf("%d", fps), "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), "-vf", "scale=1080:1080:flags=neighbor", videoFile, "-y")
 	stdout, err := cmd.Output()
 
 	if err != nil {
@@ -87,7 +92,7 @@ func (v *Visualizer) CreateGIF(fps int) {
 
 	fmt.Println(string(stdout))
 
-	cmd = exec.Command("./ffmpeg.exe", "-i", videoFile, "-pix_fmt", "rgb32", "-loop", "0", gifFile, "-y")
+	cmd = exec.Command(filepath.Join(cwd, "..", "..", "..", "visualizer", "ffmpeg.exe"), "-i", videoFile, "-pix_fmt", "rgb32", "-loop", "0", gifFile, "-y")
 	stdout, err = cmd.Output()
 
 	if err != nil {
