@@ -32,5 +32,5 @@ func Test(t *testing.T) {
 		offset += 100
 	}
 
-	v.CreateGIF()
+	v.CreateGIF(1)
 }

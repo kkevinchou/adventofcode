@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 
 	"github.com/kkevinchou/adventofcode/utils"
+	"github.com/kkevinchou/adventofcode/visualizer"
 )
 
 func main() {
@@ -61,10 +63,25 @@ func main() {
 		count += 1
 	}
 
+	visualizer := visualizer.New("grid", len(inAndOutGrid[0]), len(inAndOutGrid))
+	// for r := 0; r < maxRow; r++ {
+	// 	for c := 0; c < maxCol; c++ {
+	// 		if inAndOutGrid[r][c] == 5 {
+	// 			visualizer.DrawRC(r, c, color.RGBA{0, 255, 0, 255})
+	// 		} else {
+	// 			visualizer.DrawRC(r, c, color.RGBA{0, 0, 0, 255})
+	// 		}
+	// 	}
+	// }
+	// visualizer.SaveToFile()
+
 	current = start
+	// visualizer.DrawRC(start[0], start[1], color.RGBA{0, 0, 255, 255})
+
 	for _, dir := range path {
 		current[0] = current[0] + dir[0]
 		current[1] = current[1] + dir[1]
+		visualizer.DrawRC(current[0], current[1], color.RGBA{0, 0, 255, 255})
 
 		leftDir := dirToLeft[dir]
 		fill(inAndOutGrid, current[0]+leftDir[0], current[1]+leftDir[1], maxRow, maxCol, 1)
@@ -72,7 +89,21 @@ func main() {
 		rightDir := dirToRight[dir]
 		fill(inAndOutGrid, current[0]+rightDir[0], current[1]+rightDir[1], maxRow, maxCol, 2)
 		fill(inAndOutGrid, current[0]-dir[0]+rightDir[0], current[1]-dir[1]+rightDir[1], maxRow, maxCol, 2)
+
+		// for r := 0; r < maxRow; r++ {
+		// 	for c := 0; c < maxCol; c++ {
+		// 		if inAndOutGrid[r][c] == 1 {
+		// 			visualizer.DrawRC(r, c, color.RGBA{255, 0, 255, 255})
+		// 		} else if inAndOutGrid[r][c] == 2 {
+		// 			visualizer.DrawRC(r, c, color.RGBA{255, 255, 0, 255})
+		// 		}
+		// 	}
+		// }
+
+		// visualizer.SaveToFile()
 	}
+
+	visualizer.CreateGIF(100)
 
 	leftCount := 0
 	rightCount := 0

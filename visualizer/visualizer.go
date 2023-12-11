@@ -35,14 +35,15 @@ func New(prefix string, width, height int) *Visualizer {
 	return v
 }
 
+func (v *Visualizer) DrawRC(r, c int, color color.RGBA) {
+	v.pixels[c][r].color = color
+}
+
 func (v *Visualizer) Draw(x, y int, color color.RGBA) {
 	v.pixels[y][x].color = color
 }
 
 func (v *Visualizer) SaveToFile() {
-	fmt.Println(len(v.pixels))
-	fmt.Println(len(v.pixels[0]))
-
 	img := image.NewRGBA(image.Rect(0, 0, v.width, v.height))
 
 	for y, pixelRow := range v.pixels {
@@ -71,11 +72,12 @@ func (v *Visualizer) SaveToFile() {
 	}
 }
 
-func (v *Visualizer) CreateGIF() {
+func (v *Visualizer) CreateGIF(fps int) {
 	videoFile := fmt.Sprintf("%s.avi", v.prefix)
 	gifFile := fmt.Sprintf("%s.gif", v.prefix)
 
-	cmd := exec.Command("./ffmpeg.exe", "-framerate", "1", "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), videoFile, "-y")
+	// cmd := exec.Command("./ffmpeg.exe", "-framerate", fmt.Sprintf("%d", fps), "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), "-c:v", "libx264", videoFile, "-y")
+	cmd := exec.Command("./ffmpeg.exe", "-framerate", fmt.Sprintf("%d", fps), "-i", fmt.Sprintf("%s/%s%%d.png", v.prefix, v.prefix), videoFile, "-y")
 	stdout, err := cmd.Output()
 
 	if err != nil {
