@@ -81,3 +81,12 @@ func StringSliceToIntSlice(elements []string) []int {
 	}
 	return result
 }
+
+func StringToStringSlice(s string) []string {
+	var result []string
+
+	for _, char := range s {
+		result = append(result, string(char))
+	}
+	return result
+}
