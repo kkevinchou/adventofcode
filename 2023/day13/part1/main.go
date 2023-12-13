@@ -38,21 +38,17 @@ func main() {
 func solve(grid [][]string, maxRow, maxCol int) int {
 	// vertical case
 
-	mirrorFound := false
-	mirrorIndex := -1
 	for i := 0; i < maxCol-1; i++ {
 		for j := 0; j < maxCol; j++ {
 			leftIndex := i - j
 			rightIndex := i + j + 1
 
 			if leftIndex < 0 {
-				mirrorFound = true
-				break
+				return i + 1
 			}
 
 			if rightIndex >= maxCol {
-				mirrorFound = true
-				break
+				return i + 1
 			}
 
 			leftColumn := column(grid, leftIndex, maxRow, maxCol)
@@ -62,15 +58,6 @@ func solve(grid [][]string, maxRow, maxCol int) int {
 				break
 			}
 		}
-
-		if mirrorFound {
-			mirrorIndex = i
-			break
-		}
-	}
-
-	if mirrorFound {
-		return mirrorIndex + 1
 	}
 
 	// horizontal case
@@ -81,13 +68,11 @@ func solve(grid [][]string, maxRow, maxCol int) int {
 			downIndex := i + j + 1
 
 			if upIndex < 0 {
-				mirrorFound = true
-				break
+				return (i + 1) * 100
 			}
 
 			if downIndex >= maxRow {
-				mirrorFound = true
-				break
+				return (i + 1) * 100
 			}
 
 			upRow := row(grid, upIndex)
@@ -97,15 +82,6 @@ func solve(grid [][]string, maxRow, maxCol int) int {
 				break
 			}
 		}
-
-		if mirrorFound {
-			mirrorIndex = i
-			break
-		}
-	}
-
-	if mirrorFound {
-		return (mirrorIndex + 1) * 100
 	}
 
 	panic("WAT DIDNT FIND A MIRROR")
