@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
 )
 
 func main() {
+	startTime := time.Now()
 	file := "input"
 	generator := utils.RecordGenerator(file, "\r\n")
 
@@ -65,6 +67,7 @@ func main() {
 	}
 
 	fmt.Println(total)
+	fmt.Println(time.Since(startTime))
 }
 
 type Node struct {
@@ -91,9 +94,6 @@ func RemoveFromBox(b *Box, label string) {
 	node.Next.Previous = node.Previous
 
 	delete(b.Labels, label)
-
-	// NewNode
-	// Start - NodeA - NodeB - NodeC - End
 }
 
 func AddToBox(b *Box, label string, focalLength int) {
