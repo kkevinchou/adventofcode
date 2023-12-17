@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"container/heap"
+	"encoding/binary"
 	"fmt"
 	"os"
 	"runtime/pprof"
@@ -68,7 +70,7 @@ func solve(grid [][]int, goal [2]int, maxRow, maxCol int) *Candidate {
 	h.Push(startCandidate1)
 	h.Push(startCandidate2)
 
-	cache := map[string]int{}
+	cache := map[[6]byte]int{}
 	cache[genKey(startCandidate1)] = 1
 	cache[genKey(startCandidate2)] = 1
 
@@ -140,14 +142,48 @@ func solve(grid [][]int, goal [2]int, maxRow, maxCol int) *Candidate {
 
 }
 
-func genKey(candidate *Candidate) string {
+func genKey(candidate *Candidate) [6]byte {
 	position := candidate.Position
 	direction := candidate.IncomingDirection
 	directionCount := candidate.IncomingDirectionCount
 
-	// 1 3 5 7 11
+	// Create a buffer to store the byte array
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.LittleEndian, uint8(position[0]))
+	if err != nil {
+		fmt.Println("Error writing binary:", err)
+	}
 
-	return fmt.Sprintf("%d_%d_%d_%d_%d", position[0], position[1], direction[0], direction[1], directionCount)
+	err = binary.Write(buf, binary.LittleEndian, uint8(position[1]))
+	if err != nil {
+		fmt.Println("Error writing binary:", err)
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, int8(direction[0]))
+	if err != nil {
+		fmt.Println("Error writing binary:", err)
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, int8(direction[1]))
+	if err != nil {
+		fmt.Println("Error writing binary:", err)
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, uint16(directionCount))
+	if err != nil {
+		fmt.Println("Error writing binary:", err)
+	}
+
+	var bytes [6]byte
+
+	for i, b := range buf.Bytes() {
+		bytes[i] = b
+	}
+
+	return bytes
+
+	// return 2 * (position[0] + 2) * 3 * (position[1] + 2) * 5 * (direction[0] + 2) * 7 * (direction[1]) * 11 * (directionCount + 2)
+	// return fmt.Sprintf("%d_%d_%d_%d_%d", position[0], position[1], direction[0], direction[1], directionCount)
 }
 
 // TODO - do i need to consider if it's possible to re-enter the same cell, but at a lower cost?
