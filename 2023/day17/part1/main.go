@@ -8,28 +8,6 @@ import (
 	"github.com/kkevinchou/adventofcode/utils"
 )
 
-// can't go more than 3 forward
-// can only go forward, left, right
-// pathfind top left to bottom right
-// minimize heat loss
-
-// if we didn't have the 3 forward constraint, it would be a normal pathfinding solution
-
-// we need a heap of costs
-
-// Options
-
-// Option 1
-// could have a map where each cell has multiple states
-
-// how many times did we move forward - int
-// forward direction - DIR
-
-// 4 different directions entering -
-
-// Option 2
-// keep a heap sorted set of next cells
-
 func main() {
 	startTime := time.Now()
 	file := "input"
@@ -50,26 +28,13 @@ func main() {
 
 	maxRow, maxCol := len(grid), len(grid[0])
 
-	// for _, row := range grid {
-	// 	fmt.Println(row)
-	// }
-
 	start := [2]int{0, 0}
 	goal := [2]int{maxRow - 1, maxCol - 1}
 
 	result := solve(grid, start, goal, maxRow, maxCol)
 	fmt.Println(result.Score)
-
-	// for _, cell := range result.PathSoFar {
-	// 	stringGrid[cell[0]][cell[1]] = "#"
-	// }
-	// for _, row := range stringGrid {
-	// 	fmt.Println(row)
-	// }
 	fmt.Println(time.Since(startTime))
 }
-
-// cell position, direction count, direction
 
 func solve(grid [][]int, start, goal [2]int, maxRow, maxCol int) *Candidate {
 	h := &Heap{}
@@ -77,38 +42,20 @@ func solve(grid [][]int, start, goal [2]int, maxRow, maxCol int) *Candidate {
 	startCandidate := &Candidate{Position: start}
 	h.Push(startCandidate)
 
-	cache := map[string]int{}
-	cache[genKey(startCandidate)] = 1
+	cache := map[string]bool{}
+	cache[genKey(startCandidate)] = true
 
-	// neighborCount := map[[2]int]int{}
-
-	var steps int
-	// for i := 0; i < 100000000; i++ {
 	for {
-		steps += 1
 		candidate := heap.Pop(h).(*Candidate)
 		if candidate.Position == goal {
-			fmt.Println("STEPS", steps)
 			return candidate
 		}
-
-		// fmt.Println(candidate.Position)
 
 		r, c := candidate.Position[0], candidate.Position[1]
 		neighbors := getNeighbors(r, c, maxRow, maxCol)
 
-		// if r == 0 && c == 4 {
-		// 	fmt.Println("HI")
-		// }
-
 		for _, neighbor := range neighbors {
 			neighborDir := Direction{neighbor[0] - r, neighbor[1] - c}
-
-			var pathToNeighbor [][2]int
-			for _, pathCell := range candidate.PathSoFar {
-				pathToNeighbor = append(pathToNeighbor, pathCell)
-			}
-			pathToNeighbor = append(pathToNeighbor, neighbor)
 
 			if candidate.IncomingDirection == neighborDir {
 				if candidate.IncomingDirectionCount < 3 {
@@ -118,21 +65,16 @@ func solve(grid [][]int, start, goal [2]int, maxRow, maxCol int) *Candidate {
 						IncomingDirection:      neighborDir,
 						IncomingDirectionCount: candidate.IncomingDirectionCount + 1,
 						Score:                  candidate.Score + grid[neighbor[0]][neighbor[1]],
-						PathSoFar:              pathToNeighbor,
 					}
 
 					neighborCandidateKey := genKey(neighborCandidate)
 					if _, ok := cache[neighborCandidateKey]; !ok {
-						// if r == 0 && c == 4 {
-						// 	fmt.Println(neighborCandidateKey)
-						// }
-						// neighborCount[[2]int{r, c}] += 1
 						heap.Push(h, neighborCandidate)
-						cache[neighborCandidateKey] = 1
+						cache[neighborCandidateKey] = true
 					}
 				}
 			} else if neighborDir == dirToBack[candidate.IncomingDirection] {
-				// back case
+				// backwards case
 				continue
 			} else {
 				// left and right case
@@ -141,21 +83,15 @@ func solve(grid [][]int, start, goal [2]int, maxRow, maxCol int) *Candidate {
 					IncomingDirection:      neighborDir,
 					IncomingDirectionCount: 1,
 					Score:                  candidate.Score + grid[neighbor[0]][neighbor[1]],
-					PathSoFar:              pathToNeighbor,
 				}
 				neighborCandidateKey := genKey(neighborCandidate)
 				if _, ok := cache[neighborCandidateKey]; !ok {
-					// if r == 0 && c == 4 {
-					// 	fmt.Println(neighborCandidateKey)
-					// }
-					// neighborCount[[2]int{r, c}] += 1
 					heap.Push(h, neighborCandidate)
-					cache[neighborCandidateKey] = 1
+					cache[neighborCandidateKey] = true
 				}
 			}
 		}
 	}
-	return nil
 }
 
 func genKey(candidate *Candidate) string {
@@ -172,7 +108,6 @@ type Candidate struct {
 	IncomingDirection      Direction
 	IncomingDirectionCount int
 	Score                  int
-	PathSoFar              [][2]int
 }
 
 type Heap []*Candidate
