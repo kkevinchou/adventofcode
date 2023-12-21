@@ -18,8 +18,8 @@ type Span struct {
 }
 
 func main() {
-	file := "input"
-	generator := utils.RecordGenerator(file, "\n")
+	file := "sample"
+	generator := utils.RecordGenerator(file, "\r\n")
 
 	dirMap := map[string]Direction{
 		"0": RIGHT,
@@ -54,9 +54,18 @@ func main() {
 		instructions = append(instructions, Instruction{Direction: dirMap[directionHex], Distance: int(distance64)})
 	}
 
-	var current [2]int
-	var spans []*Span
+	// lastDir := [2]int{}
+	// for _, i := range instructions {
+	// 	if i.Direction == lastDir {
+	// 		fmt.Println("HI")
+	// 	}
+	// 	lastDir = i.Direction
+	// 	fmt.Println(i)
+	// }
 
+	var current [2]int
+
+	var spans []*Span
 	for _, instruction := range instructions {
 		if instruction.Direction == UP {
 			dist := instruction.Distance
@@ -73,6 +82,7 @@ func main() {
 			}
 			current[1] += dist
 		}
+		fmt.Println(instruction.Direction, instruction.Distance)
 	}
 
 	// var heapSpans Heap = spans
@@ -84,10 +94,9 @@ func main() {
 	// 	fmt.Println("X", span.X, "START", span.Start, "END", span.End)
 	// }
 
+	// testSimpleOverlap()
+
 	totalArea := solve(spans)
-	for _, instruction := range instructions {
-		totalArea += instruction.Distance
-	}
 	fmt.Println(totalArea)
 }
 
@@ -95,73 +104,79 @@ func testNoOverlap() {
 	s1 := &Span{Start: -686074, End: -500255, X: 5411}
 	s2 := &Span{Start: 0, End: 56407, X: 461937}
 
-	ra, area := collide(s1, s2)
-	fmt.Println(ra, area)
+	ra, rb, area := collide(s1, s2)
+	fmt.Println(ra, rb, area)
 }
 
 func testSimpleOverlap() {
 	s1 := &Span{Start: 0, End: 100, X: 0}
 	s2 := &Span{Start: 50, End: 200, X: 1}
 
-	ra, area := collide(s1, s2)
-	fmt.Println(ra, area)
-}
-
-func testFullOverlap() {
-	s1 := &Span{Start: 1, End: 100, X: 0}
-	s2 := &Span{Start: 1, End: 100, X: 1}
-
-	ra, area := collide(s1, s2)
-	fmt.Println(ra, area)
+	ra, rb, area := collide(s1, s2)
+	fmt.Println(ra, rb, area)
 }
 
 func test2() {
 	s1 := &Span{Start: -686074, End: -500255, X: 5411}
 	s2 := &Span{Start: 0, End: 56407, X: 461937}
 
-	ra, area := collide(s1, s2)
-	fmt.Println(ra, area)
-}
-
-func testCorner() {
-	s1 := &Span{Start: 1, End: 2, X: 0}
-	s2 := &Span{Start: 2, End: 3, X: 1}
-
-	ra, area := collide(s1, s2)
-	fmt.Println(ra, area)
+	ra, rb, area := collide(s1, s2)
+	fmt.Println(ra, rb, area)
 }
 
 func solve(spans []*Span) int {
 	// initialization
+
 	var heapSpans Heap = spans
 	h := &heapSpans
 	heap.Init(h)
 
+	var aSpans []*Span
 	var totalArea int = 0
 
-	aSpans := []*Span{heap.Pop(h).(*Span)}
 	for h.Len() > 0 {
-		bSpan := heap.Pop(h).(*Span)
+		// [ A B C ] ----- [ D E F ]
 
-		var nextaSpans []*Span
-		for i, aSpan := range aSpans {
-			aRemainder, area := collide(aSpan, bSpan)
-			totalArea += area
+		// A iteration:
+		// [ A ] ----- [ D E F ]
+		// [ A ] ----- [ D ]
+		// [ A0, A1 ] ----- [ E ]
+		// [ A ] ----- [ F ]
 
-			// collision detected
-			if area > 0 {
-				// add the new spans to the working set
-				nextaSpans = append(nextaSpans, aRemainder...)
-				// add the the remaining spans
-				for j := i; j < len(aSpans); j++ {
-					nextaSpans = append(nextaSpans, aSpans[j])
+		// pop off a span
+		bSpans := []*Span{heap.Pop(h).(*Span)}
+		var nextWorkingSet []*Span
+
+		for _, aSpan := range aSpans {
+			// THIS IS THE BEGINNING OF PROCESSING A
+
+			aSubSpans := []*Span{aSpan}
+			bSubSpans := bSpans
+
+			// [ A1 A2 A3 ] ---- [ B1 B2 B3 ]
+
+			var nextbSpans []*Span
+			for _, bSpan := range bSubSpans {
+				// THIS IS THE BEGINNING OF PROCESSING B
+				var nextaSubSpans []*Span
+				for _, aSubSpan := range aSubSpans {
+					aRemainderFromCollision, bRemainderFromCollision, area := collide(aSubSpan, bSpan)
+					nextaSubSpans = append(nextaSubSpans, aRemainderFromCollision...)
+					nextbSpans = append(nextbSpans, bRemainderFromCollision...)
+					if area < 0 {
+						fmt.Println("HI")
+					}
+					totalArea += area
+					fmt.Println(area)
 				}
-				break
-			} else {
-				nextaSpans = append(nextaSpans, aSpan)
+				aSubSpans = nextaSubSpans
 			}
+
+			bSpans = nextbSpans
+			nextWorkingSet = append(nextWorkingSet, aSubSpans...)
 		}
-		aSpans = nextaSpans
+		aSpans = nextWorkingSet
+		aSpans = append(aSpans, bSpans...)
 	}
 
 	return totalArea
@@ -171,109 +186,75 @@ func collideSpans(a []*Span, b *Span) []*Span {
 	return nil
 }
 
-// new working set, area produced
-// outside this code, if B did not collide with anything, add it to the working set
-// otherwise it must have collided with something and collide will have produced the proper working set spans
-func collide(a *Span, b *Span) ([]*Span, int) {
-	// no collisions
-	if a.Start > b.End || b.Start > a.End {
-		return []*Span{a}, 0
+func collide(a *Span, b *Span) ([]*Span, []*Span, int) {
+	var aRemainder []*Span
+	var bRemainder []*Span
+
+	// A covers top of B
+
+	// A B
+	// |
+	// | |
+	// | |
+	//   |
+
+	if a.Start < b.Start {
+		end := Min(a.End, b.Start-1)
+		aRemainder = append(aRemainder, &Span{X: b.X, Start: a.Start, End: end})
 	}
 
-	// A matches B exactly
+	// A covers bottom of B
 
-	// | - - |
-	// |     |
-	// | - - |
-	//
-	if a.Start == b.Start && a.End == b.End {
-		return nil, (a.End - a.Start - 1) * (b.X - a.X - 1)
+	// A B
+	//   |
+	// | |
+	// | |
+	// |
+
+	if a.End > b.End {
+		start := Max(a.Start, b.End+1)
+		aRemainder = append(aRemainder, &Span{X: b.X, Start: start, End: a.End})
 	}
 
-	// we can have an extension of the span such that the overlap is more than just from
-	// sharing the horizontal tunnel
+	// same as above, but for b
 
-	// handle span extensions
+	// B covers top of A
 
-	// A   B
+	// A B
+	//   |
+	// | |
+	// | |
 	// |
-	// |
-	// | - |
-	//     |
-	//     |
 
-	if a.End == b.Start {
-		// counts the area above the b span as well
-		return []*Span{{X: b.X, Start: a.Start, End: b.End}}, (a.End - a.Start - 1) * (b.X - a.X)
+	if b.Start < a.Start {
+		end := Min(b.End, a.Start-1)
+		bRemainder = append(bRemainder, &Span{X: b.X, Start: b.Start, End: end})
 	}
 
-	// A   B
-	//     |
-	//     |
-	// | - |
-	// |
-	// |
+	// B covers bottom of A
 
-	if a.End == b.Start {
-		// counts the area below the b span as well
-		return []*Span{{X: b.X, Start: b.Start, End: a.End}}, (a.End - a.Start - 1) * (b.X - a.X)
+	// A B
+	// |
+	// | |
+	// | |
+	//   |
+
+	if b.End > a.End {
+		start := Max(b.Start, a.End+1)
+		bRemainder = append(bRemainder, &Span{X: b.X, Start: start, End: b.End})
 	}
 
-	// B collapses bottom of A
+	// calculate vertical overlap, this is used to compute the amount of area it covers
 
-	// A     B
-	// |
-	// |     |
-	// |     |
-	// | - - |
-
-	if a.Start < b.Start && a.End == b.End {
-		return []*Span{{X: b.X, Start: a.Start, End: b.Start}}, (a.End-a.Start-1)*(b.X-a.X-1) + (b.Start - a.Start - 1)
+	var area int
+	if !(a.End < b.Start || b.End < a.Start) {
+		overlapStart := Max(a.Start, b.Start)
+		overlapEnd := Min(a.End, b.End)
+		overlapLength := overlapEnd - overlapStart + 1
+		area = (b.X - a.X + 1) * overlapLength
 	}
 
-	// B collapses top of A
-
-	// A     B
-	// | - - |
-	// |     |
-	// |
-	// |
-
-	if a.Start == b.Start && a.End > b.End {
-		return []*Span{{X: b.X, Start: b.End, End: a.End}}, (a.End-a.Start-1)*(b.X-a.X-1) + (a.End - b.End - 1)
-	}
-
-	// A covers bottom of B (impossible?)
-
-	// A     B
-	//       |
-	//       |
-	// |     |
-	// | - - |
-
-	if a.Start > b.Start && a.End == b.End {
-		panic("A covers bottom of B")
-	}
-
-	// A fully covers B
-
-	// A
-	//
-	// |
-	// |
-	// |  |
-	// |  |
-	// |
-	// |
-
-	if a.Start < b.Start && a.End > b.End {
-		return []*Span{
-			{X: b.X, Start: a.Start, End: b.Start},
-			{X: b.X, Start: b.End, End: a.End},
-		}, (a.End-a.Start-1)*(b.X-a.X-1) + (b.Start - a.Start - 1) + (a.End - b.End - 1)
-	}
-
-	panic("WAT")
+	return aRemainder, bRemainder, area
 }
 
 func Min[T cmp.Ordered](a T, b T) T {
