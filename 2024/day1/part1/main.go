@@ -13,7 +13,6 @@ func main() {
 	var right []int
 	for record := range utils.Records("sample", "\n") {
 		result := strings.Split(record.SingleLine, "   ")
-
 		left = append(left, utils.MustParseNum(result[0]))
 		right = append(right, utils.MustParseNum(result[1]))
 	}
@@ -23,10 +22,8 @@ func main() {
 
 	var sum int
 	for i := range left {
-
 		min := min(left[i], right[i])
 		max := max(left[i], right[i])
-
 		sum += max - min
 	}
 
