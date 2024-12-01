@@ -12,6 +12,39 @@ type Record struct {
 	SingleLine string
 }
 
+func Records(inputFile, separator string) func(func(Record) bool) {
+	data, err := os.ReadFile(inputFile)
+	if err != nil {
+		panic(err)
+	}
+	strData := string(data)
+	normalizedStrData := strings.ReplaceAll(strData, "\r\n", "\n")
+	splitInput := strings.Split(normalizedStrData, separator)
+
+	return func(yield func(Record) bool) {
+		for i, line := range splitInput {
+			var recordLines []string
+			if separator == "\n\n" {
+				for _, line := range strings.Split(line, "\n") {
+					recordLines = append(recordLines, strings.TrimSpace(line))
+				}
+			} else if separator == "\n" {
+				recordLines = []string{strings.TrimSpace(line)}
+			}
+
+			record := Record{
+				ID:         i,
+				Lines:      recordLines,
+				SingleLine: strings.TrimSpace(line),
+			}
+
+			if !yield(record) {
+				return
+			}
+		}
+	}
+}
+
 func RecordGenerator(inputFile, separator string) func() (Record, bool) {
 	data, err := os.ReadFile(inputFile)
 	if err != nil {

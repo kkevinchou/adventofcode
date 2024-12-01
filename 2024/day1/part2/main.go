@@ -24,8 +24,8 @@ func main() {
 	generator = utils.RecordGenerator("input", "\n")
 
 	var sum int
-	for {
-		record, done := generator()
+	for record, done := generator(); !done; record, done = generator() {
+
 		if done {
 			break
 		}

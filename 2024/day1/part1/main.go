@@ -9,15 +9,9 @@ import (
 )
 
 func main() {
-	generator := utils.RecordGenerator("input", "\n")
-
 	var left []int
 	var right []int
-	for {
-		record, done := generator()
-		if done {
-			break
-		}
+	for record := range utils.Records("sample", "\n") {
 		result := strings.Split(record.SingleLine, "   ")
 
 		left = append(left, utils.MustParseNum(result[0]))
