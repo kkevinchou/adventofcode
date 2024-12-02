@@ -103,6 +103,14 @@ func MapFromSlice[T comparable](elements []T) map[T]T {
 	return result
 }
 
+func IntAbs(value int) int {
+	if value < 0 {
+		return -value
+	}
+	return value
+
+}
+
 func StringSliceToIntSlice(elements []string) []int {
 	var result []int
 	for _, element := range elements {
