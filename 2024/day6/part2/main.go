@@ -80,12 +80,12 @@ func try(grid [][]string, startR, startC, rCount, cCount int, block [2]int) bool
 		}
 
 		if grid[nextR][nextC] == "#" || (nextR == block[0] && nextC == block[1]) {
-			dir = (dir + 1) % len(dirs)
 			key := genKey(r, c, dir)
 			if lookup[key] {
 				return true
 			}
 			lookup[key] = true
+			dir = (dir + 1) % len(dirs)
 			continue
 		}
 
