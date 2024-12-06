@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
 )
@@ -16,6 +18,7 @@ var dirs [][2]int = [][2]int{
 }
 
 func main() {
+	start := time.Now()
 	blockers := firstPass()
 
 	var startR, startC int
@@ -36,19 +39,30 @@ func main() {
 	cCount := len(grid[0])
 
 	var result int
-	copy := copyGrid(grid)
-	for _, blocker := range blockers {
-		copy[blocker[0]][blocker[1]] = "#"
-		if try(copy, startR, startC, rCount, cCount) {
-			result++
-		}
-		copy[blocker[0]][blocker[1]] = "."
+	var lock sync.Mutex
+
+	var wg sync.WaitGroup
+
+	wg.Add(len(blockers))
+
+	for i := range blockers {
+		go func() {
+			if try(grid, startR, startC, rCount, cCount, blockers[i]) {
+				lock.Lock()
+				result++
+				lock.Unlock()
+			}
+			wg.Done()
+		}()
 	}
 
+	wg.Wait()
+
 	fmt.Println(result)
+	fmt.Println(time.Since(start))
 }
 
-func try(grid [][]string, startR, startC, rCount, cCount int) bool {
+func try(grid [][]string, startR, startC, rCount, cCount int, block [2]int) bool {
 	r, c := startR, startC
 	dir := 0
 	lookup := map[string]bool{}
@@ -65,7 +79,7 @@ func try(grid [][]string, startR, startC, rCount, cCount int) bool {
 			break
 		}
 
-		if grid[nextR][nextC] == "#" {
+		if grid[nextR][nextC] == "#" || (nextR == block[0] && nextC == block[1]) {
 			dir = (dir + 1) % len(dirs)
 			continue
 		}

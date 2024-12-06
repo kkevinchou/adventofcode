@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
 )
@@ -14,6 +15,7 @@ var dirs [][2]int = [][2]int{
 }
 
 func main() {
+	start := time.Now()
 	var grid [][]string
 
 	var startR, startC int
@@ -58,4 +60,5 @@ func main() {
 	}
 
 	fmt.Println(result)
+	fmt.Println(time.Since(start))
 }
