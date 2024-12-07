@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
@@ -33,34 +32,7 @@ func solve(value, target, index int, nums []int) bool {
 		return false
 	}
 
-	var a, b, c bool
-
-	if index < 3 {
-		var wg sync.WaitGroup
-		wg.Add(3)
-		go func() {
-			a = solve(value*nums[index], target, index+1, nums)
-			wg.Done()
-		}()
-
-		go func() {
-			b = solve(value+nums[index], target, index+1, nums)
-			wg.Done()
-		}()
-
-		go func() {
-			c = solve(join(value, nums[index]), target, index+1, nums)
-			wg.Done()
-		}()
-
-		wg.Wait()
-	} else {
-		a = solve(value*nums[index], target, index+1, nums)
-		b = solve(value+nums[index], target, index+1, nums)
-		c = solve(join(value, nums[index]), target, index+1, nums)
-	}
-
-	return a || b || c
+	return solve(value*nums[index], target, index+1, nums) || solve(value+nums[index], target, index+1, nums) || solve(join(value, nums[index]), target, index+1, nums)
 }
 
 func join(a, b int) int {
