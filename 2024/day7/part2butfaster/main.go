@@ -30,39 +30,37 @@ func main() {
 
 // solves in reverse order of the numbers to enable quick short circuiting
 func solve(target, index int, nums []int) bool {
+	if index == 0 {
+		// this can only be true in the case of addition
+		return nums[index] == target
+	}
+
+	if target < 0 || index < 0 {
+		return false
+	}
+
 	var a, b, c bool
 
-	if index == 1 {
-		a = nums[index]*nums[index-1] == target
-		b = nums[index]+nums[index-1] == target
-		c = join(nums[index-1], nums[index]) == target
-	} else {
-		// mul
-		if target%nums[index] == 0 {
-			a = solve(target/nums[index], index-1, nums)
-		}
+	// mul
+	if target%nums[index] == 0 {
+		a = solve(target/nums[index], index-1, nums)
+	}
 
-		// add
-		if target-nums[index] > 0 {
-			b = solve(target-nums[index], index-1, nums)
-		}
+	// add
+	if target-nums[index] > 0 {
+		b = solve(target-nums[index], index-1, nums)
+	}
 
-		// concat
-		strTarget := fmt.Sprintf("%d", target)
-		strNum := fmt.Sprintf("%d", nums[index])
-		if strings.HasSuffix(strTarget, strNum) {
-			strNewTarget := strTarget[:len(strTarget)-len(strNum)]
+	// concat
+	strTarget := fmt.Sprintf("%d", target)
+	strNum := fmt.Sprintf("%d", nums[index])
+	if strings.HasSuffix(strTarget, strNum) {
+		strNewTarget := strTarget[:len(strTarget)-len(strNum)]
 
-			if strNewTarget != "" {
-				c = solve(utils.MustParseNum(strNewTarget), index-1, nums)
-			}
+		if strNewTarget != "" {
+			c = solve(utils.MustParseNum(strNewTarget), index-1, nums)
 		}
 	}
 
 	return a || b || c
-}
-
-func join(a, b int) int {
-	strNum := fmt.Sprintf("%d%d", a, b)
-	return utils.MustParseNum(strNum)
 }
