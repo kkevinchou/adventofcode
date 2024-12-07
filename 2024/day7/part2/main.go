@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
 )
@@ -10,6 +11,7 @@ import (
 var file string = "input"
 
 func main() {
+	start := time.Now()
 	var result int
 	for record := range utils.Records(file, "\n") {
 		strSplit := strings.Split(record.SingleLine, ":")
@@ -20,11 +22,14 @@ func main() {
 		}
 	}
 	fmt.Println(result)
+	fmt.Println(time.Since(start))
 }
 
 func solve(value, target, index int, nums []int) bool {
 	if index == len(nums) {
 		return value == target
+	} else if value > target {
+		return false
 	}
 
 	return solve(value*nums[index], target, index+1, nums) || solve(value+nums[index], target, index+1, nums) || solve(join(value, nums[index]), target, index+1, nums)
