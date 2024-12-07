@@ -34,10 +34,6 @@ func solve(target, index int, nums []int) bool {
 		return nums[index] == target
 	}
 
-	if target < 0 || index < 0 {
-		return false
-	}
-
 	var a, b, c bool
 
 	// mul
