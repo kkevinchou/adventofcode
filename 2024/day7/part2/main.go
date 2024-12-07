@@ -17,6 +17,7 @@ func main() {
 		strSplit := strings.Split(record.SingleLine, ":")
 		target := utils.MustParseNum(strSplit[0])
 		nums := utils.StringSliceToIntSlice(strings.Split(strings.TrimSpace(strSplit[1]), " "))
+
 		if solve(nums[0], target, 1, nums) {
 			result += target
 		}
@@ -32,7 +33,9 @@ func solve(value, target, index int, nums []int) bool {
 		return false
 	}
 
-	return solve(value*nums[index], target, index+1, nums) || solve(value+nums[index], target, index+1, nums) || solve(join(value, nums[index]), target, index+1, nums)
+	return solve(value*nums[index], target, index+1, nums) ||
+		solve(value+nums[index], target, index+1, nums) ||
+		solve(join(value, nums[index]), target, index+1, nums)
 }
 
 func join(a, b int) int {
