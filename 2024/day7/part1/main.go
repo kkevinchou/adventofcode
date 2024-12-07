@@ -23,20 +23,8 @@ func main() {
 }
 
 func solve(value, target, index int, nums []int) bool {
-	if index == len(nums)-1 {
-		if value*nums[index] == target {
-			return true
-		}
-
-		if value+nums[index] == target {
-			return true
-		}
-
-		if join(value, nums[index]) == target {
-			return true
-		}
-
-		return false
+	if index == len(nums) {
+		return value == target
 	}
 
 	return solve(value*nums[index], target, index+1, nums) || solve(value+nums[index], target, index+1, nums) || solve(join(value, nums[index]), target, index+1, nums)
