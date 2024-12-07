@@ -31,7 +31,6 @@ func main() {
 // solves in reverse order of the numbers to enable quick short circuiting
 func solve(target, index int, nums []int) bool {
 	if index == 0 {
-		// this can only be true in the case of addition
 		return nums[index] == target
 	}
 
