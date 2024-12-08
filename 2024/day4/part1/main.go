@@ -9,7 +9,7 @@ import (
 func main() {
 	var grid [][]rune
 
-	for record := range utils.Records("input", "\n") {
+	for record := range utils.Records("input") {
 		grid = append(grid, make([]rune, len(record.Line)))
 		for c, char := range record.Line {
 			grid[record.LineNumber][c] = char

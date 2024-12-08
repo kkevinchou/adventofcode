@@ -11,7 +11,7 @@ import (
 func main() {
 	var left []int
 	var right []int
-	for record := range utils.Records("sample", "\n") {
+	for record := range utils.Records("sample") {
 		result := strings.Split(record.Line, "   ")
 		left = append(left, utils.MustParseNum(result[0]))
 		right = append(right, utils.MustParseNum(result[1]))

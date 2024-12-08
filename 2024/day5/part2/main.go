@@ -14,7 +14,7 @@ func main() {
 	parseDependencies := true
 
 	// parse rules
-	for record := range utils.Records(file, "\n") {
+	for record := range utils.Records(file) {
 		if record.Line == "" {
 			break
 		}
@@ -33,7 +33,7 @@ func main() {
 	var total int
 
 	// evaluation
-	for record := range utils.Records(file, "\n") {
+	for record := range utils.Records(file) {
 		if strings.Contains(record.Line, "|") || record.Line == "" {
 			continue
 		}

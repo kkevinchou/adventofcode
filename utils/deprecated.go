@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+type Record struct {
+	LineNumber int
+	Lines      []string
+	Line       string
+}
+
 func RecordGenerator(inputFile, separator string) func() (Record, bool) {
 	data, err := os.ReadFile(inputFile)
 	if err != nil {

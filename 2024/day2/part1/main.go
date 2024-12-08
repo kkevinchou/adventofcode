@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var result int
-	for record := range utils.Records("input", "\n") {
+	for record := range utils.Records("input") {
 		stringSplit := strings.Split(record.Line, " ")
 
 		nums := utils.StringSliceToIntSlice(stringSplit)

@@ -11,7 +11,7 @@ var file string = "input"
 
 func main() {
 	var result int
-	for record := range utils.Records(file, "\n") {
+	for record := range utils.Records(file) {
 		strSplit := strings.Split(record.Line, ":")
 		target := utils.MustParseNum(strSplit[0])
 		nums := utils.StringSliceToIntSlice(strings.Split(strings.TrimSpace(strSplit[1]), " "))

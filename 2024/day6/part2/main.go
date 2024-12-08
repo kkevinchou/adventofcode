@@ -21,22 +21,16 @@ func main() {
 	start := time.Now()
 	blockers := firstPass()
 
+	grid, rCount, cCount := utils.ParseGrid(file)
+
 	var startR, startC int
-	var grid [][]string
-
-	for record := range utils.Records(file, "\n") {
-		grid = append(grid, make([]string, len(record.Line)))
-		for c, char := range record.Line {
-			grid[record.LineNumber][c] = string(char)
-
-			if string(char) == "^" {
-				startR = record.LineNumber
-				startC = c
+	for r := range rCount {
+		for c := range cCount {
+			if grid[r][c] == "^" {
+				startR, startC = r, c
 			}
 		}
 	}
-	rCount := len(grid)
-	cCount := len(grid[0])
 
 	var result int
 	var lock sync.Mutex
@@ -101,7 +95,7 @@ func firstPass() [][2]int {
 	var startR, startC int
 	var dir = 0
 
-	for record := range utils.Records(file, "\n") {
+	for record := range utils.Records(file) {
 		grid = append(grid, make([]string, len(record.Line)))
 		for c, char := range record.Line {
 			grid[record.LineNumber][c] = string(char)

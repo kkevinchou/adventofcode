@@ -6,35 +6,24 @@ import (
 	"strings"
 )
 
-type Record struct {
+type Rec struct {
 	LineNumber int
-	Lines      []string
 	Line       string
 }
 
-func Records(inputFile, separator string) func(func(Record) bool) {
+func Records(inputFile string) func(func(Rec) bool) {
 	data, err := os.ReadFile(inputFile)
 	if err != nil {
 		panic(err)
 	}
 	strData := string(data)
 	normalizedStrData := strings.ReplaceAll(strData, "\r\n", "\n")
-	splitInput := strings.Split(normalizedStrData, separator)
+	splitInput := strings.Split(normalizedStrData, "\n")
 
-	return func(yield func(Record) bool) {
+	return func(yield func(Rec) bool) {
 		for i, line := range splitInput {
-			var recordLines []string
-			if separator == "\n\n" {
-				for _, line := range strings.Split(line, "\n") {
-					recordLines = append(recordLines, strings.TrimSpace(line))
-				}
-			} else if separator == "\n" {
-				recordLines = []string{strings.TrimSpace(line)}
-			}
-
-			record := Record{
+			record := Rec{
 				LineNumber: i,
-				Lines:      recordLines,
 				Line:       strings.TrimSpace(line),
 			}
 
@@ -43,6 +32,22 @@ func Records(inputFile, separator string) func(func(Record) bool) {
 			}
 		}
 	}
+}
+
+func ParseGrid(inputFile string) ([][]string, int, int) {
+	var grid [][]string
+
+	for record := range Records(inputFile) {
+		grid = append(grid, make([]string, len(record.Line)))
+		for c, char := range record.Line {
+			r := record.LineNumber
+			grid[r][c] = string(char)
+		}
+	}
+	rCount := len(grid)
+	cCount := len(grid[0])
+
+	return grid, rCount, cCount
 }
 
 func MustParseNum(input string) int {

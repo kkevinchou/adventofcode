@@ -21,7 +21,7 @@ func main() {
 	var startR, startC int
 	var dirIndex = 0
 
-	for record := range utils.Records("input", "\n") {
+	for record := range utils.Records("input") {
 		grid = append(grid, make([]string, len(record.Line)))
 		for c, char := range record.Line {
 			grid[record.LineNumber][c] = string(char)
