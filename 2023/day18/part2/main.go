@@ -36,7 +36,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		lineSplit := strings.Split(line, " ")
 		hex := lineSplit[2][1 : len(lineSplit[2])-1]

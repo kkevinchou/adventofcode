@@ -18,7 +18,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		lineSplit := strings.Split(line, ":")
 		numbers := strings.Split(lineSplit[1], "|")

@@ -10,7 +10,7 @@ import (
 func main() {
 	var result int
 	for record := range utils.Records("input", "\n") {
-		stringSplit := strings.Split(record.SingleLine, " ")
+		stringSplit := strings.Split(record.Line, " ")
 
 		nums := utils.StringSliceToIntSlice(stringSplit)
 

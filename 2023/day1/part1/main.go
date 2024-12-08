@@ -17,7 +17,7 @@ func main() {
 		}
 
 		calibration := ""
-		line := record.SingleLine
+		line := record.Line
 		for i := 0; i < len(line); i++ {
 			if utils.IsNum(string(line[i])) {
 				calibration += string(line[i])

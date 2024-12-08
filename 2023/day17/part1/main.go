@@ -21,7 +21,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 		grid = append(grid, utils.StringSliceToIntSlice(utils.StringToStringSlice(line)))
 		stringGrid = append(stringGrid, utils.StringToStringSlice(line))
 	}

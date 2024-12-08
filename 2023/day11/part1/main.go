@@ -22,7 +22,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		var row []string
 		empty := true
@@ -34,7 +34,7 @@ func main() {
 		}
 
 		if empty {
-			emptyRows = append(emptyRows, record.ID)
+			emptyRows = append(emptyRows, record.LineNumber)
 		}
 		grid = append(grid, row)
 	}

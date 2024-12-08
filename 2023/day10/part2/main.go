@@ -22,7 +22,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		row := []string{}
 		for col, character := range line {
@@ -30,7 +30,7 @@ func main() {
 			row = append(row, piece)
 
 			if piece == "S" {
-				start = [2]int{record.ID, col}
+				start = [2]int{record.LineNumber, col}
 			}
 		}
 		grid = append(grid, row)

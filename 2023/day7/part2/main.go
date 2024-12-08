@@ -19,7 +19,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 		lineSplit := strings.Split(line, " ")
 		cards := lineSplit[0]
 		bid := utils.MustParseNum(lineSplit[1])

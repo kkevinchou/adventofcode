@@ -18,7 +18,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		sequence := utils.StringSliceToIntSlice(strings.Split(line, " "))
 		var lastValSum int

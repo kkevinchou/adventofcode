@@ -25,12 +25,12 @@ func main() {
 	var grid [][]string
 
 	for record := range utils.Records(file, "\n") {
-		grid = append(grid, make([]string, len(record.SingleLine)))
-		for c, char := range record.SingleLine {
-			grid[record.ID][c] = string(char)
+		grid = append(grid, make([]string, len(record.Line)))
+		for c, char := range record.Line {
+			grid[record.LineNumber][c] = string(char)
 
 			if string(char) == "^" {
-				startR = record.ID
+				startR = record.LineNumber
 				startC = c
 			}
 		}
@@ -102,12 +102,12 @@ func firstPass() [][2]int {
 	var dir = 0
 
 	for record := range utils.Records(file, "\n") {
-		grid = append(grid, make([]string, len(record.SingleLine)))
-		for c, char := range record.SingleLine {
-			grid[record.ID][c] = string(char)
+		grid = append(grid, make([]string, len(record.Line)))
+		for c, char := range record.Line {
+			grid[record.LineNumber][c] = string(char)
 
 			if string(char) == "^" {
-				startR = record.ID
+				startR = record.LineNumber
 				startC = c
 			}
 		}

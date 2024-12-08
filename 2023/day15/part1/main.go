@@ -18,7 +18,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		sequences = strings.Split(line, ",")
 	}

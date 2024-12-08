@@ -13,12 +13,12 @@ func main() {
 
 	// parse rules
 	for record := range utils.Records("input", "\n") {
-		if record.SingleLine == "" {
+		if record.Line == "" {
 			break
 		}
 
 		if parseDependencies {
-			split := strings.Split(record.SingleLine, "|")
+			split := strings.Split(record.Line, "|")
 
 			dep, num := utils.MustParseNum(split[0]), utils.MustParseNum(split[1])
 			if _, ok := dependencies[num]; !ok {
@@ -32,11 +32,11 @@ func main() {
 
 	// evaluation
 	for record := range utils.Records("input", "\n") {
-		if strings.Contains(record.SingleLine, "|") || record.SingleLine == "" {
+		if strings.Contains(record.Line, "|") || record.Line == "" {
 			continue
 		}
 
-		split := strings.Split(record.SingleLine, ",")
+		split := strings.Split(record.Line, ",")
 		nums := utils.StringSliceToIntSlice(split)
 
 		seen := map[int]bool{}

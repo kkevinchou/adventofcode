@@ -20,9 +20,9 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
-		if record.ID == 0 {
+		if record.LineNumber == 0 {
 			instructions = line
 			continue
 		} else if line == "" {

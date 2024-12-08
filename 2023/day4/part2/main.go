@@ -22,7 +22,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 
 		lineSplit := strings.Split(line, ":")
 		numbers := strings.Split(lineSplit[1], "|")
@@ -36,9 +36,9 @@ func main() {
 			if _, ok := set[num]; !ok {
 				continue
 			}
-			matches[record.ID] += 1
+			matches[record.LineNumber] += 1
 		}
-		largest = record.ID
+		largest = record.LineNumber
 	}
 
 	for i := largest; i >= 0; i-- {

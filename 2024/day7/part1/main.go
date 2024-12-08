@@ -12,7 +12,7 @@ var file string = "input"
 func main() {
 	var result int
 	for record := range utils.Records(file, "\n") {
-		strSplit := strings.Split(record.SingleLine, ":")
+		strSplit := strings.Split(record.Line, ":")
 		target := utils.MustParseNum(strSplit[0])
 		nums := utils.StringSliceToIntSlice(strings.Split(strings.TrimSpace(strSplit[1]), " "))
 		if solve(nums[0], target, 1, nums) {

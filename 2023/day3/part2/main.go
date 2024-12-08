@@ -27,7 +27,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 		lookup = append(lookup, make([]Data, len(line)))
 		rCount = len(line)
 
@@ -60,7 +60,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 		for i := 0; i < len(line); i++ {
 			char := string(line[i])
 			if char != "*" {

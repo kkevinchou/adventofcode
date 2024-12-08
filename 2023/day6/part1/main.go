@@ -19,7 +19,7 @@ func main() {
 			break
 		}
 
-		line := record.SingleLine
+		line := record.Line
 		lineSplit := strings.Split(line, ":")
 		lineType := lineSplit[0]
 		if lineType == "Time" {

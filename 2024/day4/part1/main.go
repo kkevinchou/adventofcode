@@ -10,9 +10,9 @@ func main() {
 	var grid [][]rune
 
 	for record := range utils.Records("input", "\n") {
-		grid = append(grid, make([]rune, len(record.SingleLine)))
-		for c, char := range record.SingleLine {
-			grid[record.ID][c] = char
+		grid = append(grid, make([]rune, len(record.Line)))
+		for c, char := range record.Line {
+			grid[record.LineNumber][c] = char
 		}
 	}
 

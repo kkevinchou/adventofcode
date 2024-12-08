@@ -12,7 +12,7 @@ func main() {
 	var left []int
 	var right []int
 	for record := range utils.Records("sample", "\n") {
-		result := strings.Split(record.SingleLine, "   ")
+		result := strings.Split(record.Line, "   ")
 		left = append(left, utils.MustParseNum(result[0]))
 		right = append(right, utils.MustParseNum(result[1]))
 	}

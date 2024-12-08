@@ -16,7 +16,7 @@ func main() {
 		if done {
 			break
 		}
-		splits := strings.Split(record.SingleLine, ":")
+		splits := strings.Split(record.Line, ":")
 
 		maxSoFar := map[string]int{
 			"red":   0,

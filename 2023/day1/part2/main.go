@@ -18,7 +18,7 @@ func main() {
 		}
 
 		calibration := ""
-		line := record.SingleLine
+		line := record.Line
 
 		tokens := tokenize(line)
 

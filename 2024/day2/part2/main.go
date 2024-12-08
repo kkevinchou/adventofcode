@@ -17,7 +17,7 @@ func cleverButBusted() {
 	var result int
 
 	for record := range utils.Records(infile, "\n") {
-		stringSplit := strings.Split(record.SingleLine, " ")
+		stringSplit := strings.Split(record.Line, " ")
 		nums := utils.StringSliceToIntSlice(stringSplit)
 
 		// A B C D
@@ -86,7 +86,7 @@ func naiveButWorks() {
 	var result int
 
 	for record := range utils.Records(infile, "\n") {
-		stringSplit := strings.Split(record.SingleLine, " ")
+		stringSplit := strings.Split(record.Line, " ")
 
 		nums := utils.StringSliceToIntSlice(stringSplit)
 

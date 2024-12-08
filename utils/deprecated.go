@@ -27,9 +27,9 @@ func RecordGenerator(inputFile, separator string) func() (Record, bool) {
 		}
 
 		record := Record{
-			ID:         recordNumber,
+			LineNumber: recordNumber,
 			Lines:      recordLines,
-			SingleLine: strings.TrimSpace(splitInput[recordNumber]),
+			Line:       strings.TrimSpace(splitInput[recordNumber]),
 		}
 
 		recordNumber++

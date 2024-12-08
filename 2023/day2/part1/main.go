@@ -22,7 +22,7 @@ func main() {
 		if done {
 			break
 		}
-		splits := strings.Split(record.SingleLine, ":")
+		splits := strings.Split(record.Line, ":")
 		gameNumber := utils.MustParseNum(splits[0][5:])
 
 		gameOK := true

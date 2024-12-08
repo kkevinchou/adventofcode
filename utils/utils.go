@@ -7,9 +7,9 @@ import (
 )
 
 type Record struct {
-	ID         int
+	LineNumber int
 	Lines      []string
-	SingleLine string
+	Line       string
 }
 
 func Records(inputFile, separator string) func(func(Record) bool) {
@@ -33,9 +33,9 @@ func Records(inputFile, separator string) func(func(Record) bool) {
 			}
 
 			record := Record{
-				ID:         i,
+				LineNumber: i,
 				Lines:      recordLines,
-				SingleLine: strings.TrimSpace(line),
+				Line:       strings.TrimSpace(line),
 			}
 
 			if !yield(record) {
