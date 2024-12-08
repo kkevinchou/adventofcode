@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/kkevinchou/adventofcode/utils"
 )
@@ -11,6 +12,7 @@ var file string = "input"
 type Coordinate [2]int
 
 func main() {
+	start := time.Now()
 	grid, rCount, cCount := utils.ParseGrid(file)
 
 	signals := map[string][]Coordinate{}
@@ -31,6 +33,7 @@ func main() {
 		}
 	}
 	fmt.Println(len(result))
+	fmt.Println(time.Since(start))
 }
 
 func genCoords(signals []Coordinate, rCount, cCount int) map[Coordinate]bool {
@@ -53,18 +56,14 @@ func genCoords(signals []Coordinate, rCount, cCount int) map[Coordinate]bool {
 			for {
 				curR += dr
 				curC += dc
-
-				antinode0 := Coordinate{curR, curC}
-
-				if antinode0[0] < 0 || antinode0[0] >= rCount {
+				antinode := Coordinate{curR, curC}
+				if antinode[0] < 0 || antinode[0] >= rCount {
 					break
 				}
-
-				if antinode0[1] < 0 || antinode0[1] >= cCount {
+				if antinode[1] < 0 || antinode[1] >= cCount {
 					break
 				}
-
-				result[antinode0] = true
+				result[antinode] = true
 			}
 
 			curR = iSignal[0]
@@ -72,18 +71,14 @@ func genCoords(signals []Coordinate, rCount, cCount int) map[Coordinate]bool {
 			for {
 				curR -= dr
 				curC -= dc
-
-				antinode1 := Coordinate{curR, curC}
-
-				if antinode1[0] < 0 || antinode1[0] >= rCount {
+				antinode := Coordinate{curR, curC}
+				if antinode[0] < 0 || antinode[0] >= rCount {
 					break
 				}
-
-				if antinode1[1] < 0 || antinode1[1] >= cCount {
+				if antinode[1] < 0 || antinode[1] >= cCount {
 					break
 				}
-
-				result[antinode1] = true
+				result[antinode] = true
 			}
 
 			result[iSignal] = true
