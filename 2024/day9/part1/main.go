@@ -29,11 +29,6 @@ func main() {
 
 	for left, num := range nums {
 		if left == right {
-			if left%2 == 1 {
-				fmt.Println("WAT")
-			}
-		}
-		if left == right {
 			for _ = range fileSize {
 				result += (position * left / 2)
 				position++
