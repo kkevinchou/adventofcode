@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -103,4 +104,13 @@ func StringToStringSlice(s string) []string {
 		result = append(result, string(char))
 	}
 	return result
+}
+
+func PrintGrid(grid [][]string) {
+	for r := range len(grid) {
+		for c := range len(grid[0]) {
+			fmt.Printf(grid[r][c] + " ")
+		}
+		fmt.Printf("\n")
+	}
 }
