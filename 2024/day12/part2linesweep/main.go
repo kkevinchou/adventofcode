@@ -7,46 +7,9 @@ import (
 )
 
 var file string = "input"
-
 var regionIDGen int
 
-type Data struct {
-	RegionID int
-}
-
-func key(r, c int) string {
-	return fmt.Sprintf("%d_%d", r, c)
-}
-
 func main() {
-	solve()
-
-	// file = "sample"
-	// solve()
-	// file = "sample4"
-	// solve()
-	// file = "sample2"
-	// solve()
-	// file = "sample3"
-	// solve()
-	// file = "sample5"
-	// solve()
-	// file = "custom"
-	// solve()
-	// file = "custom2"
-	// solve()
-
-	/*
-		18 * (4 + 4)
-		5 * (8)
-		5 * (8)
-		2 * 4
-	*/
-
-	// // 80, 436, 236, 368, 1206, 276, 232
-}
-
-func solve() {
 	grid, rCount, cCount := utils.ParseGrid(file)
 
 	seen := map[[2]int]bool{}
@@ -90,19 +53,12 @@ func solve() {
 	for regionID, sideCount := range right {
 		sides[regionID] += sideCount
 	}
-	// fmt.Println("TOP", top)
-	// fmt.Println("BOTTOM", bottom)
-	// fmt.Println("LEFT", left)
-	// fmt.Println("RIGHT", right)
-	// fmt.Println(sides)
-	// fmt.Println(areas)
 
 	var result int
 	for regionID, sideCount := range sides {
 		result += areas[regionID] * sideCount
 	}
 
-	// fmt.Println(areas)
 	fmt.Println(result)
 }
 
@@ -186,12 +142,3 @@ var dirs [][2]int = [][2]int{
 	{0, -1},
 	{-1, 0},
 }
-
-// 826904  - too low
-// 849724  - wrong
-// 852824  - wrong
-// 860708  - wrong
-// 867836  - broken samples - this double counts should it should theoretically be the max
-// 2709122 - too high
-// 3272136 - too high
-// 1421940 - wrong
