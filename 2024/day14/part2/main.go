@@ -71,10 +71,6 @@ func check(grid [][]string, rCount, cCount int) bool {
 
 	for r := range rCount {
 		for c := range cCount {
-			// if r+1 < 0 || r+1 >= rCount || c+1 < 0 || c+1 >= cCount {
-			// 	continue
-			// }
-
 			if c+lineSize >= cCount {
 				continue
 			}
@@ -91,9 +87,6 @@ func check(grid [][]string, rCount, cCount int) bool {
 			if horizontal {
 				return true
 			}
-			// if grid[r][c] == "O" && grid[r+1][c+1] == "O" && grid[r+1][c] == "O" && grid[r][c+1] == "O" {
-			// 	return true
-			// }
 		}
 	}
 	return false
