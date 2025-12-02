@@ -42,23 +42,3 @@ func isInvalid(num int) bool {
 
 	return firstHalf == secondHalf
 }
-
-// // saved for later
-// // returns the next invalid id, if the input id is already invalid, it returns itself
-// func nextInvalid(input string) (string, int) {
-// 	if len(input)%2 == 0 {
-// 		half := input[:len(input)/2]
-// 		double := half + half
-// 		doubleAsInt, _ := strconv.Atoi(double)
-// 		return double, doubleAsInt
-// 	}
-
-// 	length := len(input)/2 + 1
-// 	half := "1"
-// 	for range length - 1 {
-// 		half += "0"
-// 	}
-// 	double := half + half
-// 	doubleAsInt, _ := strconv.Atoi(double)
-// 	return double, doubleAsInt
-// }
