@@ -17,11 +17,11 @@ func main() {
 		panic(err)
 	}
 
-	memo = map[string]string{}
 	var sum int
 
 	lines := strings.Split(string(data), "\r\n")
 	for _, line := range lines {
+		memo = map[string]string{}
 		val, _ := strconv.Atoi(biggest(line, 12))
 		sum += val
 	}
