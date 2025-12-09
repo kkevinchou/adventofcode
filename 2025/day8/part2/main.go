@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -13,9 +12,9 @@ import (
 var file string = "input.txt"
 
 type DistancePair struct {
-	P0       Point
-	P1       Point
-	Distance float64
+	P0          Point
+	P1          Point
+	DistSquared int
 }
 
 type Point struct {
@@ -45,26 +44,22 @@ func main() {
 		points = append(points, Point{X: x, Y: y, Z: z, ID: len(points)})
 	}
 
-	var pairs []DistancePair
+	pairs := make([]DistancePair, 0, len(points)*(len(points)-1)/2)
+	for i := range len(points) {
+		p0 := points[i]
+		for j := i + 1; j < len(points); j++ {
+			p1 := points[j]
+			dx := p0.X - p1.X
+			dy := p0.Y - p1.Y
+			dz := p0.Z - p1.Z
 
-	seen := map[string]bool{}
-	for _, p0 := range points {
-		for _, p1 := range points {
-			if p0.ID == p1.ID {
-				continue
-			}
-			if _, ok := seen[key(p0.ID, p1.ID)]; ok {
-				continue
-			}
-			seen[key(p0.ID, p1.ID)] = true
-
-			dist := math.Sqrt(math.Pow(float64(p0.X-p1.X), 2) + math.Pow(float64(p0.Y-p1.Y), 2) + math.Pow(float64(p0.Z-p1.Z), 2))
-			pairs = append(pairs, DistancePair{P0: p0, P1: p1, Distance: dist})
+			distSquared := dx*dx + dy*dy + dz*dz
+			pairs = append(pairs, DistancePair{P0: p0, P1: p1, DistSquared: distSquared})
 		}
 	}
 
 	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i].Distance < pairs[j].Distance
+		return pairs[i].DistSquared < pairs[j].DistSquared
 	})
 
 	idToCircuit := map[int]int{}
