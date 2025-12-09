@@ -5,7 +5,7 @@ type Heap[E any] struct {
 	Less  func(E, E) bool
 }
 
-func New[E any](less func(E, E) bool, items ...E) *Heap[E] {
+func NewHeap[E any](less func(E, E) bool, items ...E) *Heap[E] {
 	h := &Heap[E]{
 		Slice: items,
 		Less:  less,
@@ -15,6 +15,10 @@ func New[E any](less func(E, E) bool, items ...E) *Heap[E] {
 		h.down(i, n)
 	}
 	return h
+}
+
+func (h *Heap[E]) Peek() E {
+	return h.Slice[0]
 }
 
 func (h *Heap[E]) Push(item E) {

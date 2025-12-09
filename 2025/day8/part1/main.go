@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kkevinchou/adventofcode/utils"
 )
 
 var file string = "input.txt"
@@ -60,14 +62,27 @@ func main() {
 	}
 	fmt.Println("pair creation", time.Since(start2))
 
-	sort.Slice(pairs, func(i, j int) bool {
-		return pairs[i].DistSquared < pairs[j].DistSquared
-	})
+	h := utils.NewHeap(
+		func(a, b DistancePair) bool { return a.DistSquared > b.DistSquared },
+	)
+
+	count := 0
+	for _, pair := range pairs {
+		if count < 1000 {
+			h.Push(pair)
+			count++
+		} else {
+			if pair.DistSquared < h.Peek().DistSquared {
+				h.Pop()
+				h.Push(pair)
+			}
+		}
+	}
 
 	idToCircuit := map[int]int{}
 	circuitToIDs := [][]int{}
-	for i := 0; i < 1000; i++ {
-		pair := pairs[i]
+	for range 1000 {
+		pair := h.Pop()
 		p0 := pair.P0.ID
 		p1 := pair.P1.ID
 

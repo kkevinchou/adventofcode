@@ -15,7 +15,7 @@ func Less(a, b MyStruct) bool {
 }
 
 func TestHeap(t *testing.T) {
-	heap := New(Less)
+	heap := NewHeap(Less)
 	heap.Push(MyStruct{Score: 30, Value: "c"})
 	heap.Push(MyStruct{Score: 10, Value: "a"})
 	heap.Push(MyStruct{Score: 20, Value: "b"})
